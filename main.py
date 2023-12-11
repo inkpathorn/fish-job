@@ -5,7 +5,17 @@ import pyautogui
 import time
 import keyboard
 import pydirectinput
+from directkeys import PressKey, E
 
+# PLEASE MAPPING YOUR DEVIEC HERE
+region = {"top": 1150, "left": 1491, "width": 457, "height": 2} 
+
+def pressE():
+    print('PRESS E !')
+    pydirectinput.press('e')
+    # PressKey(E)
+    time.sleep(1)
+    
 def take_screenshot():
     with mss.mss() as sct:
         filename = sct.shot(output='fullscreen.png')
@@ -28,42 +38,42 @@ def get_frame(region):
         hasGreen = np.sum(mask)
         detected = False
         if hasGreen > 0:
-            pydirectinput.press('e')
+            pressE()
             print('hasGreen: ', hasGreen)
             print('Green detected!')
             detected = True
 
-        # show image 
-        # apply mask to image
-        res = cv2.bitwise_and(screen,screen,mask=mask)
-        fin = np.hstack((screen, res))
-        # display image
-        cv2.imshow("Res", fin)
-        cv2.imshow("Mask", mask)
+        # # show image 
+        # # apply mask to image
+        # res = cv2.bitwise_and(screen,screen,mask=mask)
+        # fin = np.hstack((screen, res))
+        # # display image
+        # cv2.imshow("Res", fin)
+        # cv2.imshow("Mask", mask)
 
         # cv2.imwrite('region'+ str(num) + '.png', mask)
     return detected
-
-# PLEASE MAPPING YOUR DEVIEC HERE
-region = {"top": 862, "left": 787, "width": 352, "height": 2}
-startJob = "STAY"
 
 for i in list(range(4))[::-1]:
     print(i+1)
     time.sleep(1)
     
-
-if __name__ == "__main__":
-    while True:
-        if keyboard.is_pressed('q'):
-            break
-        start_time = time.time()
-        if startJob == "STAY":
-            pydirectinput.press('e')
-            startJob = 'RUNNING'
-        # take_screenshot()
-        detected = get_frame(region)
-        if detected: 
-            # Sleep for next job
-            time.sleep(9) 
-            startJob = "STAY"
+startJob = "STAY"
+while True:
+    if keyboard.is_pressed('q'):
+        break
+    start_time = time.time()
+    if startJob == "STAY":
+        print('startJob: ', startJob)
+        pressE()
+        startJob = 'RUNNING'
+    # take_screenshot()
+    detected = get_frame(region)
+    if detected: 
+        # Sleep for next job
+        PressKey(E)
+        print('detected before sleep')
+        time.sleep(10)
+        startJob = "STAY"
+        print('detected after sleep')
+    print(startJob)
