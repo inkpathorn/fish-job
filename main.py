@@ -6,6 +6,9 @@ import time
 import keyboard
 import pydirectinput
 from directkeys import PressKey, E
+import tkinter as tk
+
+root = tk.Tk()
 
 # PLEASE MAPPING YOUR DEVIEC HERE
 region = {"top": 1150, "left": 1491, "width": 457, "height": 2} 
@@ -54,19 +57,51 @@ def get_frame(region):
         # cv2.imwrite('region'+ str(num) + '.png', mask)
     return detected
 
-for i in list(range(4))[::-1]:
-    print(i+1)
-    time.sleep(1)
+# for i in list(range(4))[::-1]:
+#     print(i+1)
+#     time.sleep(1)
+# while True:
+#     if keyboard.is_pressed('q'):
+#         break
+#     start_time = time.time()
+#     if startJob == "STAY":
+#         print('startJob: ', startJob)
+#         pressE()
+#         startJob = 'RUNNING'
+#     # take_screenshot()
+#     detected = get_frame(region)
+#     if detected: 
+#         # Sleep for next job
+#         PressKey(E)
+#         print('detected before sleep')
+#         time.sleep(10)
+#         startJob = "STAY"
+#         print('detected after sleep')
+#     print(startJob)
+
+
+canvas1 = tk.Canvas(root, width=150, height=150)
+canvas1.pack()
+
+
+def hello(val, st):
+    jobStatus = val
+    t = st
+    if t == True:
+        t = False
+        for i in list(range(4))[::-1]:
+            print(i+1)
+            time.sleep(1)
+
     
-startJob = "STAY"
-while True:
-    if keyboard.is_pressed('q'):
-        break
-    start_time = time.time()
-    if startJob == "STAY":
-        print('startJob: ', startJob)
+    label1 = tk.Label(
+        root, text=jobStatus, fg="blue", font=("helvetica", 12, "bold")
+    )
+    canvas1.create_window(75, 100, window=label1)
+    if jobStatus == "STAY":
+        print('jobStatus: ', jobStatus)
         pressE()
-        startJob = 'RUNNING'
+        jobStatus = 'RUNNING'
     # take_screenshot()
     detected = get_frame(region)
     if detected: 
@@ -74,6 +109,15 @@ while True:
         PressKey(E)
         print('detected before sleep')
         time.sleep(10)
-        startJob = "STAY"
+        jobStatus = "STAY"
         print('detected after sleep')
-    print(startJob)
+    print("jobStatus: ", jobStatus)
+    root.after(10, lambda: hello(jobStatus, t)) 
+
+startJob = "STAY"
+fst = True
+button1 = tk.Button(text="Click Me", command=lambda: hello(startJob, fst), bg="brown", fg="white")
+canvas1.create_window(75, 75, window=button1)
+
+root.mainloop()
+    
